@@ -1,0 +1,64 @@
+######################################################################
+# Details per file setting:
+#   text    These files should be normalized (i.e. convert CRLF to LF).
+#   binary  These files are binary and should be left untouched.
+#
+# Note that binary is a macro for -text -diff.
+######################################################################
+## AUTO-DETECT
+##   Handle line endings automatically for files detected as
+##   text and leave all files detected as binary untouched.
+##   This will handle all files NOT defined below.
+* text=auto eol=lf
+
+## DOCUMENTATION
+*.md          text
+*.txt         text
+AUTHORS       text
+CHANGELOG     text
+CHANGES       text
+CONTRIBUTING  text
+COPYING       text
+COPYRIGHT*    text
+INSTALL       text
+LICENSE       text
+NEWS          text
+README*       text
+TODO          text
+
+## CONFIGURATION
+*.json  text
+*.yml   text
+*.yaml  text
+
+## SCRIPTS
+*.bat   text eol=crlf
+*.sh    text eol=lf
+*.js    text eol=lf
+*.py    text eol=lf
+*.pl    text eol=lf
+
+## IMAGES
+*.jpg   binary
+*.png   binary
+*.pdf   binary
+*.ico   binary
+# SVG treated as an asset (binary) by default. If you want to treat it as text,
+# comment-out the following line and uncomment the line after.
+*.svg   binary
+#*.svg   text
+
+## ARCHIVES
+*.7z  binary
+*.gz  binary
+*.jar binary
+*.rar binary
+*.tar binary
+*.zip binary
+
+# TOOLING
+###########
+
+## DOCKER
+*.dockerignore    text
+Dockerfile         text
