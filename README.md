@@ -24,8 +24,10 @@ In order to build an HTML report, first you need to set up a repository with a c
 
 ## Usage
 
+### Command line
+
 ```shell
-docker run --rm -i -v "$(pwd)":/tmp/model -v "$(pwd)/html":/tmp/html <image>
+docker run --rm -i -v "$(pwd)":/tmp/model -v "$(pwd)/html":/tmp/html ghcr.io/dsample/archi-docker:main
 ```
 
 Explanation of the command line arguments above:
@@ -34,7 +36,42 @@ Explanation of the command line arguments above:
 * `-i`: Waits for the container to exit before continuing
 * `-v "$(pwd)":/tmp/model`: Mounts the current working directory (where the coArchi model is located) within the container
 * `-v "$(pwd)/html":/tmp/html`: Mounts the `html` directory within the current working directory into the container for the output to be saved in
-* `<image>` :pencil2: Replace with the Docker image name
+
+### GitHub Actions
+
+Using GitHub Actions an HTML report can be generated for the model upon each commit. Placing the resulting report into the `docs` directory also enables the use of GitHub Pages (which is available for private repositories).
+
+```yaml
+name: HTML Report
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: 
+      - model
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Build the report
+      run: >-
+        docker run --rm -i
+        -v "$(pwd)":/tmp/model
+        -v "$(pwd)/docs":/tmp/html
+        ghcr.io/dsample/archi-docker:main
+    - name: Commit the report
+      run: |
+        git config --global user.name "Archi"
+        git add docs
+        git diff-index --quiet HEAD || git commit -m 'Update report'
+        git push
+```
 
 [archi]: https://www.archimatetool.com/download/
 [archi plugins]: https://www.archimatetool.com/plugins/
